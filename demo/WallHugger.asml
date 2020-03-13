@@ -1,0 +1,12 @@
+% set up touch sensors on 1 and 2 and a clock tick of 100
+
+&T1,T2;
+
+START: Aon, Con, Af, Cf, -> DEC1;
+DEC1: if(T1) then -> DEC3 else -> DEC2;
+DEC2: if(T2) then -> RightWall else -> START;
+DEC3: if(T2) then -> Back else -> LeftWall;
+Back: Ab, Cb, -> Turn;
+Turn: Af, Cb, -> START;
+LeftWall: Af, Cb, -> START;
+RightWall: Ab, Cf, -> START;

@@ -1,0 +1,19 @@
+% set up touch sensors on 1 & 2 and a clock tick of 50 (.5 seconds)
+
+&T1,T3;
+#clock=50;
+#Timer;
+
+START: Aon, Con, Af, Cf, ->DEC1;
+DEC1: if (T1) then -> M1 else -> DEC2;
+DEC2: if (T3) then -> M2 else -> START;
+M1~ Aoff,Coff, ->BackR;
+BackR: Aon, Con, Ab, Cb, Timer<-3, -> BackDecR;
+BackDecR: Ab, Cb, Timer<-Timer-1, -> DEC4;
+DEC4: if(Timer>0) then -> BackDecR else -> Right;
+Right: Af,Cb,->START;
+M2~ Aoff,Coff, ->BackL;
+BackL: Aon, Con, Ab, Cb, Timer<-3, -> BackDecL;
+BackDecL: Ab, Cb, Timer<-Timer-1, -> DEC3;
+DEC3: if(Timer>0) then -> BackDecL else -> Left;
+Left: Ab, Cf, -> START;

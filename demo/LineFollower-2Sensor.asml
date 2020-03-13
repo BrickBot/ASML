@@ -1,0 +1,16 @@
+% Line Follower - 2 Light Sensors
+
+&L1,L2;
+#CLOCK=2;
+#LIGHT=45; 
+#DARK=40;
+
+Init: Af, Cf, -> D1;
+D1: if(L1<DARK) then->D2 else->D3;
+D2: if(L2<DARK) then->Forward else->TurnLt;
+D3: if(L2<DARK) then->TurnRt else->NoChange;
+Forward: Af,Cf, ->D1;
+TurnLt: Aoff,Cf, ->D1;
+TurnRt: Af,Coff, ->D1;
+NoChange: ->D1;
+

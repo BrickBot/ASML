@@ -1,0 +1,30 @@
+% Line Follower
+%
+% Turn = direction last turned (0=Left 1=Right)
+% Timer = time to turn
+
+&L2;
+#Turn,Timer;
+#LIGHT=50; 
+#DARK=40;
+#CLOCK=5;
+
+Init: Turn<-0, ->D1;
+D1: if(L2<DARK) then->Forward else->chkLastTurn;
+Forward: Af, Cf, ->D1;
+chkLastTurn: if(Turn=0) then->setLt else->setRt;
+
+setLt: Timer<-20, ->TurnLeft;
+TurnLeft: Aoff, Cf, Timer<-Timer-1,->chkLtTmr;
+chkLtTmr: if(Timer=0) then->changeDirRt else->chkLtLight;
+chkLtLight: if(L2<DARK) then->Forward else->TurnLeft;
+changeDirRt: Timer<-40, Turn<-1, ->TurnRight;
+
+setRt: Turn<-1, Timer<-20, ->TurnRight;
+TurnRight: Af, Coff, Timer<-Timer-1, -> chkRtTimer;
+chkRtTimer: if(Timer=0) then->changeDirLt else -> chkRtLight;
+chkRtLight: if(L2<DARK) then->Forward else-> TurnRight;
+changeDirLt: Timer<-40, Turn <-0, -> TurnLeft;
+
+
+
